@@ -1,26 +1,33 @@
-import React from 'react';
-import logo from './logo.svg';
+// src/App.tsx
+import React, { useState } from 'react';
 import './App.css';
+import questionData from './data/questions.json';
+import Question from './components/Question';
+import Answer from './components/Answer';
 
-function App() {
+const App: React.FC = () => {
+  const [answer, setAnswer] = useState<string | null>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  //Fonction pour gérer le clic sur une réponse
+  const handleAnswer = (response: string) => {
+    setIsVisible(false);
+    setTimeout(() => {
+      setAnswer(response);
+      setIsVisible(true);
+    }, 300);
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Question text={questionData.question} />
+      <div className="buttons">
+        <Answer text="Yes" onClick={() => handleAnswer(questionData.answers.yes)} />
+        <Answer text="No" onClick={() => handleAnswer(questionData.answers.no)} />
+      </div>
+      <p className={isVisible ? '' : 'hidden'}>{answer}</p>
     </div>
   );
-}
+};
 
 export default App;
